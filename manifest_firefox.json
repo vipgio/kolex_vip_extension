@@ -1,0 +1,49 @@
+{
+	"manifest_version": 3,
+	"name": "Kolex VIP",
+	"version": "1.0",
+	"description": "Addition to the Kolex.gg website that adds some minor features.",
+	"browser_specific_settings": {
+		"gecko": {
+			"strict_min_version": "109.0",
+			"id": "{dfdbb479-e729-48b1-94a1-ec55c1d1c536}"
+		}
+	},
+	"permissions": ["tabs", "webRequest", "storage", "webRequestFilterResponse", "downloads"],
+	"host_permissions": ["https://kolex.gg/*", "https://api.kolex.gg/*"],
+	"content_scripts": [
+		{
+			"matches": ["https://kolex.gg/*"],
+			"js": [
+				"modules/config.js",
+				"modules/storage.js",
+				"modules/api.js",
+				"modules/ui.js",
+				"modules/trade.js",
+				"content.js"
+			],
+			"run_at": "document_end",
+			"css": ["styles.css"]
+		}
+	],
+	"background": {
+		"scripts": ["background.js"],
+		"type": "module"
+	},
+	"action": {
+		"default_popup": "popup.html",
+		"default_title": "Kolex VIP",
+		"default_icon": {
+			"16": "images/icon16.png",
+			"32": "images/icon32.png",
+			"48": "images/icon48.png",
+			"128": "images/icon128.png"
+		}
+	},
+	"icons": {
+		"16": "images/icon16.png",
+		"32": "images/icon32.png",
+		"48": "images/icon48.png",
+		"128": "images/icon128.png"
+	}
+}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html data-theme="light" lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<!-- <script src="https://cdn.tailwindcss.com"></script> -->
+		<link rel="stylesheet" href="dist/tailwind.css" />
+		<style>
+			/* Toggle specific colors */
+			input[type="checkbox"].toggle:checked ~ .slider {
+				background-color: #0060df; /* Blue when checked */
+			}
+
+			input[type="checkbox"].toggle ~ .slider {
+				background-color: #ccc; /* Light mode off-state */
+			}
+
+			/* Dot movement */
+			input[type="checkbox"].toggle:checked ~ .slider .dot {
+				transform: translateX(1.5rem);
+			}
+		</style>
+	</head>
+	<body
+		class="w-[300px] p-4 font-sans transition-colors duration-300 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100 m-0"
+	>
+		<h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mt-0">Extension Settings</h2>
+
+		<div
+			class="flex justify-between items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+		>
+			<div class="flex items-center">
+				<svg
+					class="theme-icon w-4 h-4 mr-2"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+				>
+					<path id="theme-icon-path" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+				</svg>
+				<span>Dark Mode</span>
+			</div>
+			<label class="relative inline-block w-12 h-6">
+				<input type="checkbox" id="themeToggle" class="toggle hidden" />
+				<span class="slider absolute inset-0 rounded-full transition-colors cursor-pointer">
+					<span
+						class="dot absolute left-1 bottom-1 h-4 w-4 bg-gray-100 rounded-full transition-transform"
+					></span>
+				</span>
+			</label>
+		</div>
+
+		<hr class="border-none border-t border-gray-200 dark:border-gray-700 my-3" />
+
+		<div class="flex justify-between items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+			<span>Trade Value</span>
+			<label class="relative inline-block w-12 h-6">
+				<input type="checkbox" id="trades" class="toggle hidden" />
+				<span class="slider absolute inset-0 rounded-full transition-colors cursor-pointer">
+					<span
+						class="dot absolute left-1 bottom-1 h-4 w-4 bg-gray-100 rounded-full transition-transform"
+					></span>
+				</span>
+			</label>
+		</div>
+
+		<div class="flex justify-between items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+			<span>Card Downloader</span>
+			<label class="relative inline-block w-12 h-6">
+				<input type="checkbox" id="downloader" class="toggle hidden" />
+				<span class="slider absolute inset-0 rounded-full transition-colors cursor-pointer">
+					<span
+						class="dot absolute left-1 bottom-1 h-4 w-4 bg-gray-100 rounded-full transition-transform"
+					></span>
+				</span>
+			</label>
+		</div>
+
+		<script src="popup.js"></script>
+	</body>
+</html>

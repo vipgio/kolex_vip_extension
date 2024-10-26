@@ -1,0 +1,42 @@
+{
+	"manifest_version": 3,
+	"name": "Kolex VIP",
+	"version": "1.0",
+	"description": "Addition to the Kolex.gg website that adds some minor features.",
+	"permissions": ["tabs", "webRequest", "storage", "downloads"],
+	"host_permissions": ["https://kolex.gg/*", "https://api.kolex.gg/*"],
+	"background": {
+		"service_worker": "background.js"
+	},
+	"content_scripts": [
+		{
+			"matches": ["https://kolex.gg/*"],
+			"js": [
+				"modules/config.js",
+				"modules/storage.js",
+				"modules/api.js",
+				"modules/ui.js",
+				"modules/trade.js",
+				"content.js"
+			],
+			"run_at": "document_start",
+			"css": ["styles.css"]
+		}
+	],
+	"action": {
+		"default_popup": "popup.html",
+		"default_title": "Kolex VIP",
+		"default_icon": {
+			"16": "images/icon16.png",
+			"32": "images/icon32.png",
+			"48": "images/icon48.png",
+			"128": "images/icon128.png"
+		}
+	},
+	"icons": {
+		"16": "images/icon16.png",
+		"32": "images/icon32.png",
+		"48": "images/icon48.png",
+		"128": "images/icon128.png"
+	}
+}
