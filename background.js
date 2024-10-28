@@ -1,17 +1,47 @@
+function isValidKolexURL(url) {
+	return url.startsWith("https://kolex.gg/");
+}
+
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-	if (changeInfo.status === "complete" && tab.url) {
+	if (changeInfo.status === "complete" && tab.url && isValidKolexURL(tab.url)) {
 		if (isURLLibrary(tab.url)) {
-			chrome.tabs.sendMessage(tabId, { action: "urlMatchedLibrary", url: tab.url }, (response) => {
-				if (chrome.runtime.lastError) {
-					console.error("Error sending message:", chrome.runtime.lastError);
+			chrome.tabs.sendMessage(
+				tabId,
+				{
+					action: "urlMatchedLibrary",
+					url: tab.url,
+				},
+				(response) => {
+					if (chrome.runtime.lastError) {
+						console.error("Error sending library message:", {
+							error: chrome.runtime.lastError.message,
+							url: tab.url,
+							tabId,
+						});
+					} else {
+						console.log("Library message sent successfully:", response);
+					}
 				}
-			});
+			);
 		} else if (isURLTrade(tab.url)) {
-			chrome.tabs.sendMessage(tabId, { action: "urlMatchedTrades", url: tab.url }, (response) => {
-				if (chrome.runtime.lastError) {
-					console.error("Error sending message:", chrome.runtime.lastError);
+			chrome.tabs.sendMessage(
+				tabId,
+				{
+					action: "urlMatchedTrades",
+					url: tab.url,
+				},
+				(response) => {
+					if (chrome.runtime.lastError) {
+						console.error("Error sending trade message:", {
+							error: chrome.runtime.lastError.message,
+							url: tab.url,
+							tabId,
+						});
+					} else {
+						console.log("Trade message sent successfully:", response);
+					}
 				}
-			});
+			);
 		}
 	}
 });
@@ -23,6 +53,29 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 			filename: request.filename,
 		});
 	}
+});
+
+chrome.runtime.onInstalled.addListener(() => {
+	chrome.tabs.query({ url: "https://kolex.gg/*" }, (tabs) => {
+		tabs.forEach((tab) => {
+			// Inject all your content scripts in order
+			const files = [
+				"modules/config.js",
+				"modules/storage.js",
+				"modules/api.js",
+				"modules/ui.js",
+				"modules/trade.js",
+				"content.js",
+			];
+
+			files.forEach((file) => {
+				chrome.scripting.executeScript({
+					target: { tabId: tab.id },
+					files: [file],
+				});
+			});
+		});
+	});
 });
 
 const isURLTrade = (url) => {

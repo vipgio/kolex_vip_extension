@@ -3,11 +3,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	// Load saved settings when popup opens
 	chrome.storage.local
-		.get(["trades", "downloader", "darkMode"])
+		.get(["darkMode"])
 		.then((result) => {
 			// Set feature toggles
-			document.getElementById("trades").checked = result.trades || false;
-			document.getElementById("downloader").checked = result.downloader || false;
 
 			// Set theme toggle and initial theme
 			const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -24,15 +22,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		const isDarkMode = e.target.checked;
 		updateTheme(isDarkMode);
 		chrome.storage.local.set({ darkMode: isDarkMode });
-	});
-
-	// Feature toggle handlers
-	document.getElementById("trades").addEventListener("change", (e) => {
-		chrome.storage.local.set({ trades: e.target.checked });
-	});
-
-	document.getElementById("downloader").addEventListener("change", (e) => {
-		chrome.storage.local.set({ downloader: e.target.checked });
 	});
 
 	// Listen for system theme changes

@@ -3,8 +3,8 @@
 	"name": "Kolex VIP",
 	"version": "1.0",
 	"description": "Addition to the Kolex.gg website that adds some minor features.",
-	"permissions": ["tabs", "webRequest", "storage", "downloads"],
-	"host_permissions": ["https://kolex.gg/*", "https://api.kolex.gg/*"],
+	"permissions": ["tabs", "webRequest", "storage", "downloads", "scripting"],
+	"host_permissions": ["https://kolex.gg/*"],
 	"background": {
 		"service_worker": "background.js"
 	},
@@ -19,7 +19,7 @@
 				"modules/trade.js",
 				"content.js"
 			],
-			"run_at": "document_start",
+			"run_at": "document_idle",
 			"css": ["styles.css"]
 		}
 	],

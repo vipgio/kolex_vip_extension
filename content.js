@@ -1,37 +1,30 @@
-(async function () {
-	chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+	(async () => {
 		try {
 			if (message.action === "urlMatchedTrades") {
-				const result = await chrome.storage.local.get("trades");
-				if (result.trades) {
-					await getMarketPrices(message.url);
-				} else {
-					console.log("Trades feature is disabled.");
-				}
+				// console.log("URL matched trades:", message.url);
+				await getMarketPrices(message.url);
+				sendResponse({ success: true });
 			} else if (message.action === "urlMatchedLibrary") {
-				const result = await chrome.storage.local.get("downloader");
-				if (result.downloader) {
-					await createDownloadButton(message.url);
-				} else {
-					console.log("Downloader feature is disabled.");
-				}
+				createDownloadButton(message.url);
+				sendResponse({ success: true });
 			}
 		} catch (error) {
 			console.error("Error handling message:", error);
-			// Optionally send an error response:
-			sendResponse({ error: "An error occurred" });
+			sendResponse({ error: error.message });
 		}
-	});
-})();
+	})();
+	return true;
+});
 
 const getMarketPrices = async (url) => {
 	try {
 		const tradeId = url.split("/").pop();
 		const { showSpinner } = window.ExtensionUI;
-		const { selectors } = window.ExtensionConfig;
+		const { myTotal, theirTotal } = window.ExtensionConfig.selectors;
 
-		showSpinner(selectors.myTotal);
-		showSpinner(selectors.theirTotal);
+		showSpinner(myTotal);
+		showSpinner(theirTotal);
 
 		const jwt = await window.ExtensionStorage.getJWT();
 		const userInfo = await window.ExtensionAPI.getUserInfo(jwt);

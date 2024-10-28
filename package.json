@@ -1,20 +1,22 @@
 {
-	"dependencies": {
-		"tailwindcss": "^3.4.14"
-	},
 	"devDependencies": {
 		"@babel/core": "^7.26.0",
 		"@babel/preset-env": "^7.26.0",
+		"autoprefixer": "^10.4.20",
 		"babel-loader": "^9.2.1",
 		"copy-webpack-plugin": "^12.0.2",
+		"cross-env": "^7.0.3",
 		"html-webpack-plugin": "^5.6.3",
+		"postcss": "^8.4.47",
+		"tailwindcss": "^3.4.14",
 		"webextension-polyfill": "^0.12.0",
 		"webpack": "^5.95.0",
 		"webpack-cli": "^5.1.4"
 	},
 	"scripts": {
-		"build": "webpack",
-		"watch": "webpack --watch"
+		"watch": "webpack --watch",
+		"dev": "cross-env NODE_ENV=development webpack --watch",
+		"build": "cross-env NODE_ENV=production webpack"
 	},
 	"type": "module"
 }
