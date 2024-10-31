@@ -33,12 +33,14 @@ export default {
 				},
 			},
 			{
-				test: /\.css$/, // Add rule for CSS files
+				test: /\.css$/,
 				use: [
 					"style-loader", // Injects styles into the DOM
 					"css-loader", // Translates CSS into CommonJS
 					"postcss-loader", // Processes CSS with PostCSS
 				],
+				exclude: /node_modules/,
+				sideEffects: true,
 			},
 			{
 				test: /\.(png|jpe?g|gif|svg)$/, // If you want to handle images with Webpack
