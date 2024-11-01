@@ -1,5 +1,5 @@
 const trade = {
-	separateItems(items, userId, prices) {
+	separateItems(items, userId, prices, type) {
 		const findUserItems = (id, isCurrentUser) => {
 			const userKey = Object.keys(items).find(
 				(key) => key.startsWith("user") && (items[key].id === id) === isCurrentUser
@@ -25,8 +25,8 @@ const trade = {
 		const myTotal = calculateTotal(myItems);
 		const theirTotal = calculateTotal(theirItems);
 
-		window.ExtensionUI.displayTotal(myTotal, theirTotal);
-		window.ExtensionUI.displayItemPrices(prices);
+		window.ExtensionUI.displayTotal(myTotal, theirTotal, type);
+		window.ExtensionUI.displayItemPrices(prices, type);
 	},
 };
 

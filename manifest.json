@@ -1,22 +1,22 @@
 {
 	"manifest_version": 3,
 	"name": "Kolex VIP",
-	"version": "1.1",
+	"version": "1.2",
 	"description": "Addition to the Kolex.gg website that adds some minor features.",
 	"permissions": ["tabs", "storage", "downloads", "scripting"],
 	"web_accessible_resources": [
 		{
 			"resources": ["storage.js"],
-			"matches": ["https://kolex.gg/*"]
+			"matches": ["https://kolex.gg/*", "https://kingsleague.hro.gg/*"]
 		}
 	],
-	"host_permissions": ["https://kolex.gg/*"],
+	"host_permissions": ["https://kolex.gg/*", "https://kingsleague.hro.gg/*"],
 	"background": {
 		"service_worker": "background.js"
 	},
 	"content_scripts": [
 		{
-			"matches": ["https://kolex.gg/*"],
+			"matches": ["https://kolex.gg/*", "https://kingsleague.hro.gg/*"],
 			"js": [
 				"modules/config.js",
 				"modules/storage.js",

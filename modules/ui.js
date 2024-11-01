@@ -2,33 +2,69 @@ const ui = {
 	showSpinner(selector) {
 		const header = document.querySelector(selector);
 		const spinner = document.createElement("div");
-		spinner.className = "spinner";
+		spinner.className = "spinner ml-auto";
 		spinner.id = "totalSpinner";
+		if (!header) return;
 		header.appendChild(spinner);
 	},
 
-	displayTotal(myTotal, theirTotal) {
-		const createTotalElement = (total) => {
-			const totalElement = document.createElement("div");
-			totalElement.className = "rounded-md bg-white border border-black p-2 py-1";
-			totalElement.textContent = `$${total.toFixed(2)}`;
-			return totalElement;
-		};
+	appendItem(item, selector) {
+		const contentBox = document.querySelector(selector);
+		if (!contentBox) return;
 
-		const appendTotalToHeader = (total, selector) => {
-			const header = document.querySelector(selector);
-			const spinner = document.getElementById("totalSpinner");
-			if (spinner) spinner.remove();
-			header.appendChild(createTotalElement(total));
-		};
-
-		const { myTotal: mySelector, theirTotal: theirSelector } = window.ExtensionConfig.selectors;
-		appendTotalToHeader(myTotal, mySelector);
-		appendTotalToHeader(theirTotal, theirSelector);
+		const itemElement = document.createElement("div");
+		itemElement.className = "flex items-center justify-between gap-2";
+		itemElement.innerHTML = item;
+		contentBox.appendChild(itemElement);
 	},
 
-	displayItemPrices(prices) {
-		const contentBox = document.querySelector(window.ExtensionConfig.selectors.contentBox);
+	createTotalElement(total, classes) {
+		const totalElement = document.createElement("div");
+		totalElement.className =
+			"rounded-md bg-white border border-black p-2 py-1 ml-auto font-semibold text-lg font-secondary";
+		if (classes) {
+			totalElement.classList.add(...classes.split(" ").filter(Boolean));
+		}
+		totalElement.textContent = `$${total.toFixed(2)}`;
+		return totalElement;
+	},
+
+	// appendTotalToHeader(total, selector, classes) {
+	// 	header.append(this.createTotalElement(total, classes));
+	// },
+
+	appendTotalToHeader(total, selector, classes, prepend = false) {
+		const header = document.querySelector(selector);
+		const spinner = document.getElementById("totalSpinner");
+		if (spinner) spinner.remove();
+
+		const totalElement = this.createTotalElement(total, classes);
+
+		if (prepend) {
+			header.prepend(totalElement);
+		} else {
+			header.append(totalElement);
+		}
+	},
+
+	displayTotal(myTotal, theirTotal, type) {
+		const {
+			myTotal: mySelector,
+			theirTotal: theirSelector,
+			deltaSelector,
+		} = window.ExtensionConfig.selectors[type];
+		this.appendTotalToHeader(myTotal, mySelector, "text-negative-500");
+		this.appendTotalToHeader(theirTotal, theirSelector, "text-positive-500");
+		this.appendTotalToHeader(
+			theirTotal - myTotal,
+			deltaSelector,
+			`${theirTotal - myTotal >= 0 ? "text-positive-500" : "text-negative-500"}`,
+			true
+		);
+	},
+
+	displayItemPrices(prices, type) {
+		const contentBox = document.querySelector(window.ExtensionConfig.selectors[type].contentBox);
 		if (!contentBox) return;
 
 		const h3Elements = contentBox.querySelectorAll("h3");

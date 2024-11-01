@@ -36,7 +36,7 @@ const api = {
 			const { data } = await api.getMarketInfo(jwt, templateIds, page, type); // Use api.getMarketInfo instead of this.
 			itemPrices.push(...data.templates);
 
-			if (data.templates.length > 0) {
+			if (data.templates.length === 40) {
 				await fetchMarketData(templateIds, page + 1, type);
 			}
 		};

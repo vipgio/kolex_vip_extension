@@ -1,5 +1,5 @@
 function isValidKolexURL(url) {
-	return url.startsWith("https://kolex.gg/");
+	return url.startsWith("https://kolex.gg/") || url.startsWith("https://kingsleague.hro.gg/");
 }
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
@@ -29,6 +29,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 				{
 					action: "urlMatchedTrades",
 					url: tab.url,
+					type: tab.url.includes("kolex.gg") ? "kolex" : "kingsleague",
 				},
 				(response) => {
 					if (chrome.runtime.lastError) {
@@ -56,22 +57,25 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 chrome.runtime.onInstalled.addListener(() => {
-	chrome.tabs.query({ url: "https://kolex.gg/*" }, (tabs) => {
-		tabs.forEach((tab) => {
-			// Inject all your content scripts in order
-			const files = [
-				"modules/config.js",
-				"modules/storage.js",
-				"modules/api.js",
-				"modules/ui.js",
-				"modules/trade.js",
-				"content.js",
-			];
+	const urlsToCheck = ["https://kolex.gg/*", "https://kingsleague.hro.gg/*"];
 
-			files.forEach((file) => {
-				chrome.scripting.executeScript({
-					target: { tabId: tab.id },
-					files: [file],
+	urlsToCheck.forEach((urlPattern) => {
+		chrome.tabs.query({ url: urlPattern }, (tabs) => {
+			tabs.forEach((tab) => {
+				const files = [
+					"modules/config.js",
+					"modules/storage.js",
+					"modules/api.js",
+					"modules/ui.js",
+					"modules/trade.js",
+					"content.js",
+				];
+
+				files.forEach((file) => {
+					chrome.scripting.executeScript({
+						target: { tabId: tab.id },
+						files: [file],
+					});
 				});
 			});
 		});
@@ -80,12 +84,15 @@ chrome.runtime.onInstalled.addListener(() => {
 
 const isURLTrade = (url) => {
 	const urlPattern = new URL(url);
-	return urlPattern.hostname === "kolex.gg" && urlPattern.pathname.startsWith("/trades/");
+	return (
+		(urlPattern.hostname === "kolex.gg" || urlPattern.hostname === "kingsleague.hro.gg") &&
+		urlPattern.pathname.startsWith("/trades/")
+	);
 };
 
 const isURLLibrary = (url) => {
 	const urlPattern = new URL(url);
-	if (urlPattern.hostname === "kolex.gg") {
+	if (urlPattern.hostname === "kolex.gg" || urlPattern.hostname === "kingsleague.hro.gg") {
 		const pathSegments = urlPattern.pathname.split("/");
 
 		if (
