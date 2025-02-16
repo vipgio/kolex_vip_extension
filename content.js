@@ -7,7 +7,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 					: await getMarketPrices(message.url, "kingsleague");
 				sendResponse({ success: true });
 			} else if (message.action === "urlMatchedLibrary") {
-				createDownloadButton(message.url);
+				// createDownloadButton(message.url);
 				sendResponse({ success: true });
 			} else {
 				sendResponse({ error: "Invalid action" });
